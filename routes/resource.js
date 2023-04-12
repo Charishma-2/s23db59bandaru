@@ -8,13 +8,13 @@ var tennis_controller = require('../controllers/tennis');
 router.get('/', api_controller.api);
 /// tennis ROUTES ///
 // POST request for creating a tennis.
-router.post('/tenniss', tennis_controller.tennis_create_post);
+router.post('/tennis', tennis_controller.tennis_create_post);
 // DELETE request to delete tennis.
-router.delete('/tenniss/:id', tennis_controller.tennis_delete);
+router.delete('/tennis/:id', tennis_controller.tennis_delete);
 // PUT request to update tennis.
-router.put('/tenniss/:id', tennis_controller.tennis_update_put);
+router.put('/tennis/:id', tennis_controller.tennis_update_put);
 // GET request for one tennis.
-router.get('/tenniss/:id', tennis_controller.tennis_detail);
+router.get('/tennis/:id', tennis_controller.tennis_detail);
 // GET request for list of all tennis items.
-router.get('/tenniss', tennis_controller.tennis_list);
+router.get('/tennis', tennis_controller.tennis_list);
 module.exports = router;
