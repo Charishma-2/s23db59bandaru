@@ -1,68 +1,152 @@
 var tennis = require('../models/tennis');
-// List of all tenniss
-exports.tennis_list = function(req, res) {
- res.send('NOT IMPLEMENTED: tennis list');
-};
-// for a specific tennis.
-exports.tennis_detail = function(req, res) {
- res.send('NOT IMPLEMENTED: tennis detail: ' + req.params.id);
-};
-// Handle tennis create on POST.
-exports.tennis_create_post = function(req, res) {
- res.send('NOT IMPLEMENTED: tennis create POST');
-};
-// Handle tennis delete form on DELETE.
-exports.tennis_delete = function(req, res) {
- res.send('NOT IMPLEMENTED: tennis delete DELETE ' + req.params.id);
-};
-// Handle tennis update form on PUT.
-exports.tennis_update_put = function(req, res) {
- res.send('NOT IMPLEMENTED: tennis update PUT' + req.params.id);
-};
-
-// List of all Tennis
+// List of all tennis
 exports.tennis_list = async function(req, res) {
     try{
-    tennis = await tennis.find();
-    res.send(tennis);
+    theTennises = await tennis.find();
+    res.send(theTennises);
     }
     catch(err){
     res.status(500);
     res.send(`{"error": ${err}}`);
     }
-   };
+};
+exports.tennis_detail = async function (req, res) {
+    console.log("detail" + req.params.id)
+    try {
+        result = await tennis.findById(req.params.id)
+        res.send(result)
+    } catch (error) {
+        res.status(500)
+        res.send(`{"error": document for id ${req.params.id} not found`);
+    }
+};
+// Handle tennis create on POST.
+
+exports.tennis_create_post = async function (req, res) {
+    console.log(req.body)
+    let document = new tennis();
+    document.Player_Name = req.body.Player_Name;
+    document.Player_Age = req.body.Player_Age;
+    document.No_Of_Matches_Played = req.body.No_Of_Matches_Played;
+    try {
+        let result = await document.save();
+        res.send(result);
+    }
+    catch (err) {
+        res.status(500);
+        res.send(`{"error": ${err}}`);
+    }
+};
+
+// Handle tennis delete form on DELETE.
+exports.tennis_delete = async function (req, res) {
+    console.log("delete " + req.params.id)
+    try {
+        result = await tennis.findByIdAndDelete(req.params.id)
+        console.log("Removed " + result)
+        res.send(result)
+    } catch (err) {
+        res.status(500)
+        res.send(`{"error": Error deleting ${err}}`);
+    }
+};
+
+// Handle tennis update form on PUT.
+exports.tennis_update_put = async function (req, res) {
+    console.log(`update on id ${req.params.id} with body ${JSON.stringify(req.body)}`)
+    try {
+        let toUpdate = await tennis.findById(req.params.id)
+        // Do updates of properties
+        if (req.body.Player_Name) toUpdate.Player_Name = req.body.Player_Name;
+        if (req.body.Player_Age) toUpdate.Player_Age = req.body.Player_Age;
+        if (req.body.No_Of_Matches_Played) toUpdate.No_Of_Matches_Played = req.body.No_Of_Matches_Played;
+        let result = await toUpdate.save();
+        console.log("Sucess " + result)
+        res.send(result)
+    } catch (err) {
+        res.status(500)
+        res.send(`{"error": ${err}: Update for id ${req.params.id} failed`);
+    }
+};
+
 
 // VIEWS
 // Handle a show all view
-exports.tennis_view_all_Page = async function(req, res) {
+exports.tennis_view_all_Page = async function (req, res) {
+    try {
+        theTennis = await tennis.find();
+        res.render('tennis', { title: 'tennis Search Results', results: theTennis });
+    }
+    catch (err) {
+        res.status(500);
+        res.send(`{"error": ${err}}`);
+    }
+};
+
+// Handle a show one view with id specified by query
+exports.tennis_view_one_Page = async function (req, res) {
+    console.log("single view for id " + req.query.id)
+    try {
+        result = await tennis.findById(req.query.id)
+        res.render('tennisdetail',
+            { title: 'tennis Detail', toShow: result });
+    }
+    catch (err) {
+        res.status(500)
+        res.send(`{'error': '${err}'}`);
+    }
+};
+
+// Handle building the view for creating a tennis.
+// No body, no in path parameter, no query.
+// Does not need to be async
+exports.tennis_create_Page =  function(req, res) {
+    console.log("create view")
     try{
-    thetenniss = await tennis.find();
-    res.render('tennis', { title: 'tennis Search Results', results: thetenniss });
+        res.render('tenniscreate', { title: 'tennis Create'});
     }
     catch(err){
-    res.status(500);
-    res.send(`{"error": ${err}}`);
+        res.status(500)
+        res.send(`{'error': '${err}'}`);
     }
-   };
+};
 
-
-   // Handle Costume create on POST.
-exports.costume_create_post = async function(req, res) {
-    console.log(req.body)
-    let document = new Costume();
-    // We are looking for a body, since POST does not have query parameters.
-    // Even though bodies can be in many different formats, we will be picky
-    // and require that it be a json object
-    // {"costume_type":"goat", "cost":12, "size":"large"}
-    document.Player_Name = req.body.costume_type;
-    document.Player_Age = req.body.cost;
-    document.No_Of_Matches_Played = req.body.size;
+// Handle building the view for updating a tennis.
+// query provides the id
+exports.tennis_update_Page =  async function(req, res) {
+    console.log("update view for item "+req.query.id)
     try{
-    let result = await document.save();
-    res.send(result);
+        let result = await tennis.findById(req.query.id)
+        res.render('tennisupdate', { title: 'Tennis Update', toShow: result });
     }
     catch(err){
-    res.status(500);
-    res.send(`{"error": ${err}}`);
+        res.status(500)
+        res.send(`{'error': '${err}'}`);
     }
-   };
+};
+
+// Handle a delete one view with id from query
+exports.tennis_delete_Page = async function(req, res) {
+    console.log("Delete view for id "  + req.query.id)
+    try{
+        result = await tennis.findById(req.query.id)
+        res.render('tennisdelete', { title: 'Tennis Delete', toShow: result });
+    }
+    catch(err){
+        res.status(500)
+        res.send(`{'error': '${err}'}`);
+    }
+};
+
+// VIEWS 
+// Handle a show all view 
+exports.tennis_view_all_Page = async function(req, res) { 
+    try{ 
+        theTennises = await tennis.find(); 
+        res.render('tennis', { title: 'tennis Search Results', result: theTennises }); 
+    } 
+    catch(err){ 
+        res.status(500); 
+        res.send(`{"error": ${err}}`); 
+    }   
+}; 
