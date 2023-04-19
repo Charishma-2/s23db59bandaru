@@ -81,7 +81,7 @@ async function recreateDB(){
       console.log(err);
     });
 }
-let reseed = true;
+let reseed = false;
 if (reseed) { recreateDB();}
 
 // catch 404 and forward to error handler

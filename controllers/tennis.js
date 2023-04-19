@@ -11,9 +11,9 @@ exports.tennis_list = async function(req, res) {
     }
 };
 exports.tennis_detail = async function (req, res) {
-    console.log("detail" + req.params.id)
+    console.log("detail" + req.query.id)
     try {
-        result = await tennis.findById(req.params.id)
+        result = await tennis.findById(req.query.id)
         res.send(result)
     } catch (error) {
         res.status(500)
@@ -58,15 +58,16 @@ exports.tennis_update_put = async function (req, res) {
         let toUpdate = await tennis.findById(req.params.id)
         // Do updates of properties
         if (req.body.Player_Name) toUpdate.Player_Name = req.body.Player_Name;
-        if (req.body.Player_Age) toUpdate.Player_Age = req.body.Player_Age;
+        if (req.body.Player_Age)toUpdate.Player_Age = req.body.Player_Age;
         if (req.body.No_Of_Matches_Played) toUpdate.No_Of_Matches_Played = req.body.No_Of_Matches_Played;
+        if (req.body.tennis ) toUpdate.tennis  = req.body.tennis ;
         let result = await toUpdate.save();
         console.log("Sucess " + result)
         res.send(result)
     } catch (err) {
         res.status(500)
         res.send(`{"error": ${err}: Update for id ${req.params.id} failed`);
-    }
+    }
 };
 
 

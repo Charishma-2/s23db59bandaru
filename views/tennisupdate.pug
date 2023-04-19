@@ -13,18 +13,18 @@ block content
             div.row(class='tennisAttr mb-2')
             div.mr-1 ID is
             div #{tennisid}
-            - let actionid = "/resource/tennises/" + tennisid
+            - let actionid = "/resource/tennis/" + tennisid
             form(id='tennisForm', action= actionid, method="PUT")
-            div.form-group
-                label.tennisAttr(for='Player_Name') tennis playername
-                input#tennisplayername(type='text' name='Player_Name', value= Player_Name )
-            div.form-group
-                label.tennisAttr(for='Player_Age') tennis playerage
-                input#tennisplayerage(type='text' name='Player_Age', value= Player_Age )
-            div.form-group
-                label.tennisAttr(for='No_Of_Matches_Played') tennis noofmatchesplayed
-                input#tennisnoofmatchesplayed(type='number' name='No_Of_Matches_Played', value= No_Of_Matches_Played )
-            input(type="submit" class = "btn btn-primary")
+                div.form-group
+                    label.tennisAttr(for='Player_Name') tennis playername
+                    input#tennisplayername(type='text' name='Player_Name', value= Player_Name )
+                div.form-group
+                    label.tennisAttr(for='Player_Age') tennis playerage
+                    input#tennisplayerage(type='text' name='Player_Age', value= Player_Age )
+                div.form-group
+                    label.tennisAttr(for='No_Of_Matches_Played') tennis noofmatchesplayed
+                    input#tennisnoofmatchesplayed(type='number' name='No_Of_Matches_Played', value= No_Of_Matches_Played )
+                input(type="submit" class = "btn btn-primary")
 
     script.
             document.forms['tennisForm'].addEventListener('submit', (event) => {
