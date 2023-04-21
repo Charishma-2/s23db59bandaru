@@ -1,17 +1,21 @@
-extends layout 
+extends layout
 
-block content 
-    h1= title
-    div.container-fluid
-        - let dest1 = `dispatch(\"/tennis/create")`
-        //button.btn( class="btn-success ml-1", onclick = dest1) Create
-        div.row
-            each item, index in result
-                div.col-sm-2(onclick=`buy(${index})`) #{item["Player_Name"]}, #{item["Player_Age"]}, #{item["No_Of_Matches_Played"]}
-                    br
-                    button.btn( class="btn-primary ml-1", onclick= destination) Update
-                    
-    script. 
-        function dispatch(path) {
-            window.location.href=path
-        }
+block content
+  h1= title
+  - let item = result
+  div(claass="container-fluid mt-3")
+   div(class="row m-1")
+    each item,index in result
+     - let destination = `dispatch(\"/tennis/update?id=${item._id}\")`
+     div(class="col-sm-3 bg-info m-2 p-4" onclick=`buy(${index})`) #{item.Player_Name} - #{item.Player_Age} - #{item.No_Of_Matches_Played}
+      button.btn( class="btn-primary ml-1", onclick= destination) Update
+  script.
+   function buy(itemNo)
+   {
+     alert(`You purchased Item ${itemNo+1}`)
+   }
+   function dispatch(path)
+   {
+     window.location.href=path
+   }
+
