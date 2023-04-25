@@ -1,23 +1,34 @@
-extends layout
+//- extends layout
 
-block content
-  h1= title
-  p Welcome to #{title}
+//- block content
+//-   h1= title
+//-   p Welcome to #{title}
 
-  p Charishma Chowdary Bandaru
+//-   p Charishma Chowdary Bandaru
   
-  button(type="button",onclick="doReduce()" class="btn btn-secondary") Press Me
+//-   button(type="button",onclick="doReduce()" class="btn btn-secondary") Press Me
 
-  div(id="reduce") Reduce the value
-  script.
-    var count=20;
-    var change=-1;
-    function doReduce() {
-      count = count+change;
-      change--;
-      document.getElementById("reduce").innerHTML=`Count ${count} with change ${change}`
-    }
+//-   div(id="reduce") Reduce the value
+//-   script.
+//-     var count=20;
+//-     var change=-1;
+//-     function doReduce() {
+//-       count = count+change;
+//-       change--;
+//-       document.getElementById("reduce").innerHTML=`Count ${count} with change ${change}`
+//-     }
 
   
  
 
+extends layout
+block content
+    if (!user)
+      a(href="/login") Login
+      br
+      a(href="/register") Register
+    if (user)
+      p You are currently logged in as #{user.username}
+      a(href="/tennis") Take me to tennis 
+      br
+      a(href="/logout") Logout
